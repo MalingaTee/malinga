@@ -30,24 +30,54 @@ int main(void)
 	RCC->AHBENR |= RCC_AHBENR_GPIOAEN;
 	GPIOA->MODER |= GPIO_MODER_MODER5_0;
 
-    /* Loop forever */
+//    /* Loop forever */
+//	for(;;) {
+//
+//		 uint8_t pole[32] = {1, 0, 1, 0, 1, 0, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0};
+//
+//		 for (uint8_t i = 0;i<32; i++){
+//
+//			if (pole[i]==1){
+//			        GPIOA->BSRR = (1<<5); // set
+//			 		for (volatile uint32_t i = 0; i < 100000; i++) {} // delay
+//
+//			}else {
+//				GPIOA->BRR = (1<<5); // reset
+//							 		for (volatile uint32_t i = 0; i < 100000; i++) {} // delay
+//			}
+//
+//		 }
+//
+//
+	//}
+
+	// second method
+
 	for(;;) {
 
-		 uint8_t pole[32] = {1, 0, 1, 0, 1, 0, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0};
+		uint32_t morse = 0b10101001110111011100101010000000;
 
-		 for (uint8_t i = 0;i<32; i++){
-
-			if (pole[i]==1){
-			        GPIOA->BSRR = (1<<5); // set
-			 		for (volatile uint32_t i = 0; i < 100000; i++) {} // delay
-
-			}else {
-				GPIOA->BRR = (1<<5); // reset
-							 		for (volatile uint32_t i = 0; i < 100000; i++) {} // delay
-			}
-
-		 }
+		for (uint8_t i=0; i<32; i++)
+		{
+				if (morse & (1U << 31))
+				{
+					GPIOA ->BSRR = (1<<5);
+				}
+				else {
+					GPIOA ->BRR = (1<<5);
+				}
+				morse = morse << 1;
+				for (volatile uint32_t i = 0; i < 100000; i++){}
+		}
 
 
 	}
+
+
+
+
+
+
+
+
 }
